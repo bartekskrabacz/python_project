@@ -40,18 +40,19 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
-
+from Data_importer import Data_importer
 
 print(__doc__)
 
 # Display progress logs on stdout
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
+data_importer = Data_importer()
 
 # #############################################################################
 # Download the data, if not already on disk and load it as numpy arrays
 
-lfw_people = fetch_lfw_people(min_faces_per_person=70, resize=0.4)
+lfw_people = data_importer.import_data(min_faces_per_person=70, resize=0.4)
 
 # introspect the images arrays to find the shapes (for plotting)
 n_samples, h, w = lfw_people.images.shape
