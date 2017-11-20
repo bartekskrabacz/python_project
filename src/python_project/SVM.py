@@ -160,6 +160,6 @@ print(confusion_matrix(y_test, y_pred, labels=range(n_classes)))
 eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
 # plot_gallery(eigenfaces, eigenface_titles, h, w)
 drawer = Drawer(y_pred, y_test, target_names, i,X_test,eigenfaces )
-drawer.show()
+drawer.show(h,w)
 data_importer.clear_cache()
 

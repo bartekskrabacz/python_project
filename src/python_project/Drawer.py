@@ -30,8 +30,7 @@ class Drawer():
 
 
     def show(self,h,w):
-        prediction_titles = [self.title(self.y_pred, self.y_test, self.target_names, i)
-                             for i in range(self.y_pred.shape[0])]
+        prediction_titles = [self.title() for i in range(self.y_pred.shape[0])]
 
         self.plot_gallery(self.X_test, prediction_titles, h, w)
 
