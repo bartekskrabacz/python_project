@@ -8,6 +8,7 @@ class Drawer():
         self.target_names=target_names
         self.i=i
         self.X_test=X_test
+        self.eigenfaces=eigenfaces
 
     def plot_gallery(self,images, titles, h, w, n_row=3, n_col=4):
         """Helper function to plot a gallery of portraits"""
