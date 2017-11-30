@@ -35,7 +35,7 @@ output_dir = os.path.join(__location__, "api")
 module_dir = os.path.join(__location__, "../src/python_project")
 try:
     shutil.rmtree(output_dir)
-except FileNotFoundError:
+except IOError:
     pass
 cmd_line_template = "sphinx-apidoc -f -o {outputdir} {moduledir}"
 cmd_line = cmd_line_template.format(outputdir=output_dir, moduledir=module_dir)
