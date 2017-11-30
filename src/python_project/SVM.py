@@ -42,7 +42,7 @@ from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 from Data_importer import Data_importer
 from Drawer import Drawer
-from . import Categorizer
+from Categorizer import Categorizer
 
 print(__doc__)
 
@@ -57,21 +57,8 @@ lfw_people = data_importer.import_data(min_faces_per_person=70, resize=0.4)
 
 
 # introspect the images arrays to find the shapes (for plotting)
-# n_samples, h, w = lfw_people.images.shape
-# # for machine learning we use the 2 data directly (as relative pixel
-# # positions info is ignored by this model)
-# X = lfw_people.data
-# n_features = X.shape[1]
-#
-# # the label to predict is the id of the person
-# y = lfw_people.target
-# target_names = lfw_people.target_names
-# n_classes = target_names.shape[0]
-#
-# print("Total dataset size:")
-# print("n_samples: %d" % n_samples)
-# print("n_features: %d" % n_features)
-# print("n_classes: %d" % n_classes)
+target_names = lfw_people.target_names
+n_classes = target_names.shape[0]
 
 
 # #############################################################################
@@ -80,9 +67,8 @@ lfw_people = data_importer.import_data(min_faces_per_person=70, resize=0.4)
 # split into a training and testing set
 
 categorizer = Categorizer(lfw_people)
-#
-# X_train, X_test, y_train, y_test = train_test_split(
-#     X, y, test_size=0.25, random_state=42)
+n_samples, h, w = categorizer.return_shape_data()
+
 
 X_train, X_test, y_train, y_test = categorizer.categorize()
 # #############################################################################
@@ -98,6 +84,7 @@ pca = PCA(n_components=n_components, svd_solver='randomized',
 
 print("done in %0.3fs" % (time() - t0))
 eigenfaces = pca.components_.reshape((n_components, h, w))
+
 
 print("Projecting the input data on the eigenfaces orthonormal basis")
 t0 = time()
@@ -133,6 +120,6 @@ print(confusion_matrix(y_test, y_pred, labels=range(n_classes)))
 
 
 eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
-drawer = Drawer(y_pred, y_test, target_names, i,X_test,eigenfaces )
+drawer = Drawer(y_pred, y_test, target_names, X_test, eigenfaces)
 drawer.show(h,w)
 data_importer.clear_cache()

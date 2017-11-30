@@ -2,11 +2,10 @@ import matplotlib.pyplot as plt
 
 class Drawer():
 
-    def __init__(self,y_pred, y_test, target_names, i,X_test,eigenfaces):
+    def __init__(self,y_pred, y_test, target_names,X_test,eigenfaces):
         self.y_pred=y_pred
         self.y_test=y_test
         self.target_names=target_names
-        self.i=i
         self.X_test=X_test
         self.eigenfaces=eigenfaces
 
@@ -24,14 +23,19 @@ class Drawer():
 
     # plot the result of the prediction on a portion of the test set
 
-    def title(self):
-        pred_name = self.target_names[self.y_pred[self.i]].rsplit(' ', 1)[-1]
-        true_name = self.target_names[self.y_test[self.i]].rsplit(' ', 1)[-1]
-        return 'predicted: %s\ntrue:      %s' % (pred_name, true_name)
+    # def title(self):
+    #     pred_name = self.target_names[self.y_pred[self.i]].rsplit(' ', 1)[-1]
+    #     true_name = self.target_names[self.y_test[self.i]].rsplit(' ', 1)[-1]
+    #     return 'predicted: %s\ntrue:      %s' % (pred_name, true_name)
 
 
     def show(self,h,w):
-        prediction_titles = [self.title() for i in range(self.y_pred.shape[0])]
+        prediction_titles = []
+
+        for i in range(self.y_pred.shape[0]):
+            pred_name = self.target_names[self.y_pred[i]].rsplit(' ', 1)[-1]
+            true_name = self.target_names[self.y_test[i]].rsplit(' ', 1)[-1]
+            prediction_titles.append('predicted: %s\ntrue:      %s' % (pred_name, true_name))
 
         self.plot_gallery(self.X_test, prediction_titles, h, w)
 

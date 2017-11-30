@@ -49,10 +49,10 @@ __all__ = ['BaseCrossValidator',
            'check_cv']
 
 class Spliter():
-    def __index__(self):
-        self.StratifiedShuffleSplit= StratifiedShuffleSplit
-        self.ShuffleSplit=ShuffleSplit
-
+    def __init__(self):
+        self.StratifiedShuffleSplit = StratifiedShuffleSplit
+        self.ShuffleSplit = ShuffleSplit
+        self.chain = chain
 
 class chain(object):
     """

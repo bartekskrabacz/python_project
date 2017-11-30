@@ -3,18 +3,23 @@ from sklearn.utils.validation import _num_samples, column_or_1d
 import warnings
 from math import ceil, floor
 import numpy as np
-from . import Spliter
+from itertools import chain
+from Spliter import Spliter
 
 
 class Categorizer:
 
     def __init__ (self, lfw_people):
         self.lfw_people=lfw_people
+        self.n_samples, self.h, self.w = self.lfw_people.images.shape
+
+    def return_shape_data(self):
+        return self.n_samples, self.h, self.w
 
     def categorize(self):
 
         # introspect the images arrays to find the shapes (for plotting)
-        n_samples, h, w = self.lfw_people.images.shape
+        self.n_samples, self.h, self.w
         # for machine learning we use the 2 data directly (as relative pixel
         # positions info is ignored by this model)
         X = self.lfw_people.data
@@ -26,7 +31,7 @@ class Categorizer:
         n_classes = target_names.shape[0]
 
         print("Total dataset size:")
-        print("n_samples: %d" % n_samples)
+        print("n_samples: %d" % self.n_samples)
         print("n_features: %d" % n_features)
         print("n_classes: %d" % n_classes)
 
@@ -179,7 +184,7 @@ def train_test_split(*arrays, **options):
 
         train, test = next(cv.split(X=arrays[0], y=stratify))
 
-    return list(Spliter.chain.from_iterable((safe_indexing(a, train),
+    return list(chain.from_iterable((safe_indexing(a, train),
                                      safe_indexing(a, test)) for a in arrays))
 
 
