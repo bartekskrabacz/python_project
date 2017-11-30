@@ -42,6 +42,7 @@ from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 from Data_importer import Data_importer
 from Drawer import Drawer
+from . import Categorizer
 
 print(__doc__)
 
@@ -50,37 +51,40 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
 data_importer = Data_importer()
 
-# #############################################################################
-# Download the data, if not already on disk and load it as numpy arrays
-
+# ############################################################
 lfw_people = data_importer.import_data(min_faces_per_person=70, resize=0.4)
 
+
+
 # introspect the images arrays to find the shapes (for plotting)
-n_samples, h, w = lfw_people.images.shape
-# for machine learning we use the 2 data directly (as relative pixel
-# positions info is ignored by this model)
-X = lfw_people.data
-n_features = X.shape[1]
-
-# the label to predict is the id of the person
-y = lfw_people.target
-target_names = lfw_people.target_names
-n_classes = target_names.shape[0]
-
-print("Total dataset size:")
-print("n_samples: %d" % n_samples)
-print("n_features: %d" % n_features)
-print("n_classes: %d" % n_classes)
+# n_samples, h, w = lfw_people.images.shape
+# # for machine learning we use the 2 data directly (as relative pixel
+# # positions info is ignored by this model)
+# X = lfw_people.data
+# n_features = X.shape[1]
+#
+# # the label to predict is the id of the person
+# y = lfw_people.target
+# target_names = lfw_people.target_names
+# n_classes = target_names.shape[0]
+#
+# print("Total dataset size:")
+# print("n_samples: %d" % n_samples)
+# print("n_features: %d" % n_features)
+# print("n_classes: %d" % n_classes)
 
 
 # #############################################################################
 # Split into a training set and a test set using a stratified k fold
 
 # split into a training and testing set
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.25, random_state=42)
 
+categorizer = Categorizer(lfw_people)
+#
+# X_train, X_test, y_train, y_test = train_test_split(
+#     X, y, test_size=0.25, random_state=42)
 
+X_train, X_test, y_train, y_test = categorizer.categorize()
 # #############################################################################
 # Compute a PCA (eigenfaces) on the face dataset (treated as unlabeled
 # dataset): unsupervised feature extraction / dimensionality reduction
@@ -132,4 +136,3 @@ eigenface_titles = ["eigenface %d" % i for i in range(eigenfaces.shape[0])]
 drawer = Drawer(y_pred, y_test, target_names, i,X_test,eigenfaces )
 drawer.show(h,w)
 data_importer.clear_cache()
-
